@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gsd_app/screens/create_task.dart';
 import 'package:gsd_app/screens/setting_drawer.dart';
 import 'package:gsd_app/components/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
@@ -10,7 +11,7 @@ void main() {
 }
 
 addTestDataToRepo() {
-  for (int i = 0; i < 50; i++) {
+  for (int i = 0; i < 5; i++) {
     if (i.isEven) {
       TaskRepository.shared.toDo('Tareas que debo hacer .$i');
     } else {
@@ -25,22 +26,20 @@ class GSDApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color(0xFF1D1E33),
+        accentColor: Color(0xFF699999),
         textTheme: const TextTheme(
           bodyText1: TextStyle(
               fontFamily: "Pacifico",
               fontSize: 20.0,
-              color: Colors.white70,
+              color: Colors.white,
               fontStyle: FontStyle.italic),
           bodyText2: TextStyle(
-              fontFamily: "Pacifico",
-              fontSize: 18.0,
-              color: Colors.redAccent),
+              fontFamily: "Pacifico", fontSize: 18.0, color: Colors.redAccent),
           headline6: TextStyle(
               fontFamily: "Pacifico", fontSize: 20.0, color: Colors.white),
           headline2: TextStyle(
               fontFamily: "Pacifico", fontSize: 14.0, color: Colors.white),
         ),
-
       ),
       title: 'GSD',
       home: Scaffold(
@@ -61,10 +60,14 @@ class GSDApp extends StatelessWidget {
           ),
         ),
         floatingActionButton: Theme(
-          data: ThemeData(accentColor: Color(0xFF69f0ae)),
+          data: ThemeData(
+            accentColor: Color(0xFF699999),
+          ),
           child: FloatingActionButton(
-            //Todo create a new widget where user can create a task
-            onPressed: () => TaskRepository.shared.toDo('Una nueva esperanza para todos los que quieren aprender el camino de la fuerza'),
+             // todo create a new widget where user can create a task
+            onPressed: () {
+              _createNewTask(context);
+            },
             child: Icon(
               Icons.add,
               color: Colors.white,
@@ -73,5 +76,14 @@ class GSDApp extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<String?> _createNewTask(BuildContext context) async {
+    final String? newTaskText = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (context) => CreateTask(),
+      ),
+    );
+    TaskRepository.shared.toDo(newTaskText.toString());
   }
 }

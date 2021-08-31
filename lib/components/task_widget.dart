@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
+import 'package:gsd_app/components/constants.dart';
 import 'package:gsd_app/screens/edit_task.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 import 'package:mow/mow.dart';
-
 import 'delete_task_background.dart';
 import 'edit_task_background.dart';
 import 'image_widget.dart';
@@ -74,7 +73,9 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
 
   Future<bool?> _confirmDismiss(DismissDirection direction) async {
     switch (direction) {
+
       case DismissDirection.endToStart:
+      /// Edit a task
         final String? newValue = await Navigator.of(context).push<String>(
           MaterialPageRoute(
             builder: (context) => EditTask(),
@@ -86,7 +87,6 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
         });
         break;
       case DismissDirection.startToEnd:
-
         /// Delete de task
         //todo refactor this into a Widget o Utils
         ScaffoldMessenger.of(_currentContext).showSnackBar(
@@ -130,12 +130,17 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: ListTile(
           leading: Checkbox(
+            activeColor: Theme.of(context).accentColor,
             value: widget.model.state == TaskState.done,
             onChanged: _onCheckboxTap,
           ),
           title: Text(
+            // todo cambiar el color del texto y tachado al se un task.done
             widget.model.description,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: widget. model.state == TaskState.done
+                ? Theme.of(context).textTheme.bodyText1
+                : kTextTaskDoneStyle,
+            // style: Theme.of(context).textTheme.bodyText1,
           ),
           trailing: ImageWidget(imageName: 'taskImage',),
         ),

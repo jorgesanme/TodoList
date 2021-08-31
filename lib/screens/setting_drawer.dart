@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gsd_app/components/my_togglebuttons.dart';
 
 class SettingsDrawer extends StatelessWidget {
   @override
@@ -72,13 +73,18 @@ class DoneHeader extends StatelessWidget {
 class DoneOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return MyToggleButtons();
+  }
+}
+
+/*
+Column(
         children: [Text('Nothing'), Text('Grey out'), Text('Delete')]
             .map((e) => ElevatedButton(onPressed: null,
               child:  e ))
             .toList());
-  }
-}
+ */
+
 /*
 ListView(
   padding: EdgeInsets.zero,
