@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gsd_app/setting_drawer.dart';
-import 'package:gsd_app/task_widget.dart';
+import 'package:gsd_app/screens/setting_drawer.dart';
+import 'package:gsd_app/components/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
 void main() {

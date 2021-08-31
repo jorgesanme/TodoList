@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gsd_app/task_widget.dart';
+import 'package:gsd_app/components/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
 class EditTask extends StatefulWidget {
@@ -97,15 +97,5 @@ class _EditTaskState extends State<EditTask> {
   int? _extractIndex(BuildContext context) {
     final Object? index = ModalRoute.of(context)?.settings.arguments;
     return index as int?;
-  }
-
-  //return task value to the navigator
-  void _returnToCaller(BuildContext context, String newValue) {
-    String value = _controller.text;
-    if (value.isEmpty) {
-      Navigator.pop(context);
-    } else {
-      Navigator.pop(context, newValue);
-    }
   }
 }

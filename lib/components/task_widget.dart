@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:gsd_app/edit_task.dart';
+import 'package:gsd_app/screens/edit_task.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 import 'package:mow/mow.dart';
+
+import 'delete_task_background.dart';
+import 'edit_task_background.dart';
+import 'image_widget.dart';
 
 class TaskListWidget extends ModelWidget<TaskRepository> {
   TaskListWidget({required TaskRepository model, Key? key})
@@ -140,94 +144,8 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
   }
 }
 
-class ImageWidget extends StatelessWidget {
-  final String imageName;
 
-  ImageWidget({Key? key, required this.imageName}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50.0,
-      width: 50.0,
-      child: Image(
-          image: AssetImage('images/$imageName.png'), fit: BoxFit.contain),
-      margin: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    );
-  }
-}
 
-class DeleteTaskBackground extends StatelessWidget {
-  late final MainAxisAlignment aligment;
 
-  DeleteTaskBackground({required MainAxisAlignment alignment})
-      : aligment = alignment;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red[300],
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: aligment,
-          children: [
-            Icon(
-              Icons.delete_forever,
-              color: Colors.white,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              'Deleting Task',
-              style: Theme.of(context).textTheme.headline2,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EditTaskBackground extends StatelessWidget {
-  late final MainAxisAlignment aligment;
-
-  EditTaskBackground({required MainAxisAlignment alignment})
-      : aligment = alignment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.greenAccent,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: aligment,
-          children: [
-            Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              'Edit task',
-              style: Theme.of(context).textTheme.headline2,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-/* la imagen puesta a la derecha del texto
-trailing: CircleAvatar(
-            // child: Image.asset('images/taskImage.png'),
-            child: Image.network('https://bit.ly/3zJBXeI'),
-          ),
- */
