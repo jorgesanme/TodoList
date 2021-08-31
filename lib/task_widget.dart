@@ -70,17 +70,15 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
   Future<bool?> _confirmDismiss(DismissDirection direction) async {
     switch (direction) {
       case DismissDirection.endToStart:
-        print('vamos a editar: muestra un SnackBar con el index del Task');
         final String? newValue = await Navigator.of(context).push<String>(
           MaterialPageRoute(
             builder: (context) => EditTask(),
             settings: RouteSettings(arguments: widget.index),
           ),
         );
-        print('\n \n Esto devuelve el editado: $newValue \n \n');
-        TaskRepository.shared.editTask(widget.index, widget.model, newValue!);
-        setState(() {
 
+        setState(() {
+          TaskRepository.shared.editTask(widget.index, widget.model, newValue!);
         });
         break;
       case DismissDirection.startToEnd:

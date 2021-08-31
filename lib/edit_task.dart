@@ -1,51 +1,67 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gsd_app/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
-class EditTask extends StatefulWidget{
+class EditTask extends StatefulWidget {
   @override
   _EditTaskState createState() => _EditTaskState();
 }
 
 class _EditTaskState extends State<EditTask> {
   final _controller = TextEditingController();
-  late int index ;
-  late final  widget ;
+  late int index;
+
+  late final widget;
 
   @override
   Widget build(BuildContext context) {
     index = _extractIndex(context)!;
-    TaskWidget widget = TaskWidget(model: TaskRepository.shared[index], index: index) ;
+    TaskWidget widget =
+        TaskWidget(model: TaskRepository.shared[index], index: index);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit your Task', style: Theme.of(context).textTheme.headline6,),
-        leading: BackButton(onPressed: (){
-          returnText(context);
-        },),
+        title: Text(
+          'Edit your Task',
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        leading: BackButton(
+          onPressed: () {
+            returnText(context);
+          },
+        ),
       ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            controller: _controller,
-            onChanged: (value){
-              setState((){
-                //update the textfield for each letter tapped
-                // widget.model.description =  _controller.text;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: widget.model.description,
-              labelText: 'Edit your task',
-              counterText: '${_controller.text.length.toInt()}',
-              border: OutlineInputBorder(),
-              icon: Icon(Icons.edit),
-              suffixIcon: _iconButton(),
-            ),
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _controller,
+                onChanged: (value) {
+                  setState(() {
+                    //update the textfield for each letter tapped
+                    // widget.model.description =  _controller.text;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: widget.model.description,
+                  labelText: 'Edit your task',
+                  counterText: '${_controller.text.length.toInt()}',
+                  border: OutlineInputBorder(),
+                  icon: Icon(Icons.edit),
+                  suffixIcon: _iconButton(),
+                ),
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    returnText(context);
+                  },
+                  child: Text('Confirm'),),
+            ],
           ),
         ),
       ),
@@ -53,47 +69,43 @@ class _EditTaskState extends State<EditTask> {
   }
 
   void returnText(BuildContext context) {
-     String editedText;
-    if (_controller.text.isEmpty){
+    String editedText;
+    if (_controller.text.isEmpty) {
       editedText = 'Empty task';
-    }else{
+    } else {
       editedText = _controller.text;
-      setState(() {
-        // TaskRepository.shared[index].description = editedText;
-
-      });
     }
-     // _returnToCaller(context,editedText);
-    Navigator.pop(context,editedText);
+    Navigator.pop(context, editedText);
   }
 
- IconButton? _iconButton() {
+  IconButton? _iconButton() {
     IconButton? iconClear;
-    if(_controller.text.isEmpty){
-      iconClear= null;
-    }else{
-      iconClear = IconButton(onPressed: (){
-        setState(() {
-          _controller.clear();
-        });
-      }, icon: Icon(Icons.clear) );
+    if (_controller.text.isEmpty) {
+      iconClear = null;
+    } else {
+      iconClear = IconButton(
+          onPressed: () {
+            setState(() {
+              _controller.clear();
+            });
+          },
+          icon: Icon(Icons.clear));
     }
     return iconClear;
- }
+  }
 
-
- int? _extractIndex(BuildContext context) {
+  int? _extractIndex(BuildContext context) {
     final Object? index = ModalRoute.of(context)?.settings.arguments;
-    return index as int? ;
- }
+    return index as int?;
+  }
 
- //return task value to the navigator
-void _returnToCaller(BuildContext context, String newValue){
+  //return task value to the navigator
+  void _returnToCaller(BuildContext context, String newValue) {
     String value = _controller.text;
-    if ( value.isEmpty){
+    if (value.isEmpty) {
       Navigator.pop(context);
-    }else{
+    } else {
       Navigator.pop(context, newValue);
     }
-}
+  }
 }

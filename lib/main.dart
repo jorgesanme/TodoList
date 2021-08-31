@@ -63,6 +63,7 @@ class GSDApp extends StatelessWidget {
         floatingActionButton: Theme(
           data: ThemeData(accentColor: Color(0xFF69f0ae)),
           child: FloatingActionButton(
+            //Todo create a new widget where user can create a task
             onPressed: () => TaskRepository.shared.toDo('Una nueva esperanza para todos los que quieren aprender el camino de la fuerza'),
             child: Icon(
               Icons.add,
