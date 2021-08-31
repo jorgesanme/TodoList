@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gsd_app/edit_task.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 import 'package:mow/mow.dart';
@@ -76,7 +77,6 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
             settings: RouteSettings(arguments: widget.index),
           ),
         );
-
         setState(() {
           TaskRepository.shared.editTask(widget.index, widget.model, newValue!);
         });
@@ -133,19 +133,31 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
             widget.model.description,
             style: Theme.of(context).textTheme.bodyText1,
           ),
+          trailing: ImageWidget(imageName: 'taskImage',),
         ),
       ),
     );
   }
 }
 
-_editTask(BuildContext context, int index) async {
-  await Navigator.of(context).push<String>(
-    MaterialPageRoute<String>(
-      settings: RouteSettings(arguments: index),
-      builder: (context) => EditTask(),
-    ),
-  );
+class ImageWidget extends StatelessWidget {
+  final String imageName;
+
+  ImageWidget({Key? key, required this.imageName}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50.0,
+      width: 50.0,
+      child: Image(
+          image: AssetImage('images/$imageName.png'), fit: BoxFit.contain),
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    );
+  }
 }
 
 class DeleteTaskBackground extends StatelessWidget {
@@ -215,7 +227,7 @@ class EditTaskBackground extends StatelessWidget {
 }
 /* la imagen puesta a la derecha del texto
 trailing: CircleAvatar(
-            // child: Image.asset('images/flutter-icon.png'),
+            // child: Image.asset('images/taskImage.png'),
             child: Image.network('https://bit.ly/3zJBXeI'),
           ),
  */
