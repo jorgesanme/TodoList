@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:gsd_app/domain/User_Preferences.dart';
 import 'package:gsd_app/screens/create_task.dart';
-import 'package:gsd_app/screens/setting_drawer.dart';
-import 'package:gsd_app/components/task_widget.dart';
+import 'package:gsd_app/domain/setting_drawer.dart';
+import 'package:gsd_app/domain/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
-void main() {
+void main() async{
+  // init the preferences
+  WidgetsFlutterBinding.ensureInitialized();
   // añadir datos al repo
   addTestDataToRepo();
+  UserPreferences.init();
+  await UserPreferences.init();
   runApp(GSDApp());
 }
 
@@ -64,7 +69,7 @@ class GSDApp extends StatelessWidget {
             accentColor: Color(0xFF699999),
           ),
           child: FloatingActionButton(
-             // todo create a new widget where user can create a task
+            // todo create a new widget where user can create a task
             onPressed: () {
               _createNewTask(context);
             },
@@ -79,11 +84,13 @@ class GSDApp extends StatelessWidget {
   }
 
   Future<String?> _createNewTask(BuildContext context) async {
+
     final String? newTaskText = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (context) => CreateTask(),
-      ),
-    );
-    TaskRepository.shared.toDo(newTaskText.toString());
+        MaterialPageRoute(
+          builder: (context) => CreateTask(),
+        ),
+      );
+      TaskRepository.shared.toDo(newTaskText.toString());
+    }
   }
-}
+

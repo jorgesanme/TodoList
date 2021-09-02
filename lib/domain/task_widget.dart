@@ -4,9 +4,9 @@ import 'package:gsd_app/components/constants.dart';
 import 'package:gsd_app/screens/edit_task.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 import 'package:mow/mow.dart';
-import 'delete_task_background.dart';
-import 'edit_task_background.dart';
-import 'image_widget.dart';
+import '../components/delete_task_background.dart';
+import '../components/edit_task_background.dart';
+import '../components/image_widget.dart';
 
 class TaskListWidget extends ModelWidget<TaskRepository> {
   TaskListWidget({required TaskRepository model, Key? key})

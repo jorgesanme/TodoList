@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gsd_app/components/task_widget.dart';
+import 'package:gsd_app/domain/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
 class EditTask extends StatefulWidget {
