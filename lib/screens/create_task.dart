@@ -43,7 +43,7 @@ class _CreateTaskState extends State<CreateTask> {
                   counterText: '${_controller.text.length.toInt()}',
                   border: OutlineInputBorder(),
                   icon: Icon(Icons.edit),
-                  suffixIcon: _iconButton(),
+                  suffixIcon: _iconButtonmy(),
                 ),
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
@@ -59,7 +59,7 @@ class _CreateTaskState extends State<CreateTask> {
       ),
     );
   }
-  IconButton? _iconButton() {
+  IconButton? _iconButtonmy() {
     IconButton? iconClear;
     if (_controller.text.isEmpty) {
       iconClear = null;

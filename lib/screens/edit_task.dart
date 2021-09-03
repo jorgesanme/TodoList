@@ -57,14 +57,52 @@ class _EditTaskState extends State<EditTask> {
                 maxLines: null,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    returnText(context);
-                  },
-                  child: Text('Confirm'),),
+                onPressed: () async {
+                  // showDialog(context: context, builder: createDialog);
+                  returnText(context);
+                },
+                child: Text('Confirm'),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget createDialog(BuildContext context) {
+    return AlertDialog(
+      title: Text('Atención Pregunta!!'),
+      content: TextField(
+        controller: _controller,
+        onChanged: (value) {
+          setState(() {
+            //update the textfield for each letter tapped
+            // widget.model.description =  _controller.text;
+          });
+        },
+        decoration: InputDecoration(
+          hintText: 'enter text',
+          labelText: 'Crear your task',
+          counterText: '${_controller.text.length.toInt()}',
+          border: OutlineInputBorder(),
+          icon: Icon(Icons.edit),
+          suffixIcon: _iconButton(),
+        ),
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {},
+          child: Text('Pos-Fale'),
+        ),
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Nooo!!!'))
+      ],
     );
   }
 

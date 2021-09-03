@@ -5,7 +5,9 @@ import 'package:gsd_app/domain/setting_drawer.dart';
 import 'package:gsd_app/domain/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
-void main() async{
+import 'Utils/my_alertdialog.dart';
+
+void main() async {
   // init the preferences
   WidgetsFlutterBinding.ensureInitialized();
   // añadir datos al repo
@@ -71,7 +73,8 @@ class GSDApp extends StatelessWidget {
           child: FloatingActionButton(
             // todo create a new widget where user can create a task
             onPressed: () {
-              _createNewTask(context);
+              showDialog(context: context, builder: createDialog);
+              // _createNewTask(context);
             },
             child: Icon(
               Icons.add,
@@ -84,13 +87,22 @@ class GSDApp extends StatelessWidget {
   }
 
   Future<String?> _createNewTask(BuildContext context) async {
-
     final String? newTaskText = await Navigator.of(context).push<String>(
-        MaterialPageRoute(
-          builder: (context) => CreateTask(),
-        ),
-      );
-      TaskRepository.shared.toDo(newTaskText.toString());
-    }
+      MaterialPageRoute(
+        builder: (context) => CreateTask(),
+      ),
+    );
+    TaskRepository.shared.toDo(newTaskText.toString());
   }
 
+  Widget createDialog(BuildContext context) {
+    return AlertDialog(
+      title: Text('Atención Pregunta!!'),
+      content: Text('Do yo want to delete all from repository??'),
+      actions: [
+        TextButton(onPressed:(){}, child:Text('Pos-Fale'),),
+        TextButton(onPressed: (){}, child: Text('Nooo!!!'))
+      ],
+    );
+  }
+}
