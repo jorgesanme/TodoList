@@ -47,6 +47,7 @@ class TaskWidget extends ModelWidget<Task> {
 
 class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
   late BuildContext _currentContext;
+  String _pref = UserPreferences.getUserPreference();
 
   void _onCheckboxTap(bool? value) {
     final bool newValue = value ?? false;
@@ -55,18 +56,30 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
     // si la opcion es delete = borrar uno del repositorio
     // si la opcion es Alldelete = llamar al repositorio y borrar todas con un .map
     //check it work
-    String _pref = UserPreferences.getUserPreference();
+    _pref = UserPreferences.getUserPreference();
     print(_pref);
 
     switch(_pref){
       case kOptionTextDelete:{
         if(widget.model.state == TaskState.toDo){
-          TaskRepository.shared.removeAt(widget.index);
+          setState(()  {
+            TaskRepository.shared.removeAt(widget.index);
+            //lanzar un snackbar -> borrado
+          });
+        }else{
+          widget.model.state = newValue ? TaskState.done : TaskState.toDo;
         }
         break;
       }
       case kOptionTextDeleteAll:{
-        // TaskRepository.shared.removeAllDone();
+        if(widget.model.state == TaskState.toDo){
+          setState(()  {
+            // TaskRepository.shared.removeAllDone();
+            //lanzar un snackbar -> borrado
+          });
+        }else{
+          widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+        }
         break;
       }
       case kOptionTextCrossOut: {
@@ -144,6 +157,13 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
         break;
     }
   }
+   checkPreference()  {
+    if (_pref == kOptionTextCrossOut && widget. model.state == TaskState.done) {
+      return kTextTaskDoneStyle;
+    }else{
+      return kTextTaskTodoStyle;//Theme.of(context).textTheme.bodyText1;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,9 +187,10 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
           title: Text(
             // cambiar el color del texto y tachado al se un task.done
             widget.model.description,
-            style: widget. model.state == TaskState.toDo
-                ? Theme.of(context).textTheme.bodyText1
-                : kTextTaskDoneStyle,
+            style: checkPreference(),
+            // style: widget. model.state == TaskState.toDo
+            //     ? Theme.of(context).textTheme.bodyText1
+            //     : kTextTaskDoneStyle,
           ),
           trailing: ImageWidget(imageName: 'taskImage',),
         ),

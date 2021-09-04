@@ -6,6 +6,11 @@ const kTextTaskDoneStyle = TextStyle(
     color: Colors.grey,
     fontStyle: FontStyle.italic,
     decoration: TextDecoration.lineThrough);
+const kTextTaskTodoStyle = TextStyle(
+    fontFamily: "Pacifico",
+    fontSize: 20.0,
+    color: Colors.white,
+    fontStyle: FontStyle.italic);
 
  const String kOptionTextNothing = 'Nothing'; //(Default)
  const String kOptionTextCrossOut = 'Cross out';
