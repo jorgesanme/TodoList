@@ -35,7 +35,6 @@ class _TaskListWidgetState
 
 class TaskWidget extends ModelWidget<Task> {
   late final int index;
-
   @override
   TaskWidget({required Task model, required int index, Key? key})
       : index = index,
@@ -54,42 +53,47 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
     // extraer de sharePreference la preference y
     // si la opcion es cross out  = hacerlo
     // si la opcion es delete = borrar uno del repositorio
-    // si la opcion es Alldelete = llamar al repositorio y borrar todas con un .map
+    // si la opcion es Alldelete = llamar al repositorio y borrar todas de un plumazo
     //check it work
-    _pref = UserPreferences.getUserPreference();
-    print(_pref);
+    setState(() {
+      _pref = UserPreferences.getUserPreference();
+    });
 
-    switch(_pref){
-      case kOptionTextDelete:{
-        if(widget.model.state == TaskState.toDo){
-          setState(()  {
-            TaskRepository.shared.removeAt(widget.index);
-            //lanzar un snackbar -> borrado
-          });
-        }else{
-          widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+    switch (_pref) {
+      case kOptionTextDelete:
+        {
+          if (widget.model.state == TaskState.toDo) {
+            setState(() {
+              TaskRepository.shared.removeAt(widget.index);
+              _confirmDelete(widget.model.description);
+            });
+          } else {
+            widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+          }
+          break;
         }
-        break;
-      }
-      case kOptionTextDeleteAll:{
-        if(widget.model.state == TaskState.toDo){
-          setState(()  {
-            // TaskRepository.shared.removeAllDone();
-            //lanzar un snackbar -> borrado
-          });
-        }else{
-          widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+      case kOptionTextDeleteAll:
+        {
+          if (widget.model.state == TaskState.toDo) {
+            setState(() {
+               TaskRepository.shared.removeAllDone();
+            });
+          } else {
+            widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+          }
+          break;
         }
-        break;
-      }
-      case kOptionTextCrossOut: {
-        widget.model.state = newValue ? TaskState.done : TaskState.toDo;
-        break;
-      }
+      case kOptionTextCrossOut:
+        {
+          widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+          break;
+        }
+      case kOptionTextNothing:
+        {
+          widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+          break;
+        }
     }
-
-
-
   }
 
   /// borrar un task al desplazar una card
@@ -98,10 +102,10 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
     assert(TaskRepository.shared.length == oldLength - 1);
   }
 
-  void _confirmDelete() {
+  void _confirmDelete(String showText) {
     ScaffoldMessenger.of(_currentContext).showSnackBar(SnackBar(
       content: Text(
-        'DELETED',
+        '$showText \nDELETED',
         style: Theme.of(context).textTheme.bodyText2,
         textAlign: TextAlign.center,
       ),
@@ -113,23 +117,24 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
 
   Future<bool?> _confirmDismiss(DismissDirection direction) async {
     switch (direction) {
-
       case DismissDirection.endToStart:
-      /// Edit a task
+        /// Edit a task
         final String? newValue = await Navigator.of(context).push<String>(
           MaterialPageRoute(
             builder: (context) => EditTask(),
             settings: RouteSettings(arguments: widget.index),
           ),
         );
-        if ( newValue != null ){
+        if (newValue != null) {
           setState(() {
-            TaskRepository.shared.editTask(widget.index, widget.model, newValue);
+            TaskRepository.shared
+                .editTask(widget.index, widget.model, newValue);
           });
         }
 
         break;
       case DismissDirection.startToEnd:
+
         /// Delete de task
         //todo refactor this into a Widget o Utils
         ScaffoldMessenger.of(_currentContext).showSnackBar(
@@ -138,7 +143,7 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
               label: 'Confirm',
               onPressed: () {
                 TaskRepository.shared.removeAt(widget.index);
-                _confirmDelete();
+                _confirmDelete(widget.model.description);
               },
             ),
             content: Text(
@@ -157,11 +162,15 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
         break;
     }
   }
-   checkPreference()  {
-    if (_pref == kOptionTextCrossOut && widget. model.state == TaskState.done) {
+
+  checkPreference() {
+    if (_pref == kOptionTextCrossOut && widget.model.state == TaskState.done) {
       return kTextTaskDoneStyle;
-    }else{
-      return kTextTaskTodoStyle;//Theme.of(context).textTheme.bodyText1;
+    } else if (_pref == kOptionTextNothing &&
+        widget.model.state == TaskState.done) {
+      return Theme.of(context).textTheme.bodyText1;
+    } else {
+      return kTextTaskTodoStyle;
     }
   }
 
@@ -188,19 +197,12 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
             // cambiar el color del texto y tachado al se un task.done
             widget.model.description,
             style: checkPreference(),
-            // style: widget. model.state == TaskState.toDo
-            //     ? Theme.of(context).textTheme.bodyText1
-            //     : kTextTaskDoneStyle,
           ),
-          trailing: ImageWidget(imageName: 'taskImage',),
+          trailing: ImageWidget(
+            imageName: 'taskImage',
+          ),
         ),
       ),
     );
   }
 }
-
-
-
-
-
-

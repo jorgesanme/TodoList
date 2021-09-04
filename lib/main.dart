@@ -26,8 +26,10 @@ addTestDataToRepo() {
 }
 
 class GSDApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color(0xFF1D1E33),
@@ -71,8 +73,8 @@ class GSDApp extends StatelessWidget {
           child: FloatingActionButton(
             // todo create a new widget where user can create a task
             onPressed: () {
-              // showDialog(context: context, builder: createDialog);
-              // _createNewTask(context);
+               // showDialog(context: context, builder: createDialog);
+               //_createNewTask(context);
             },
             child: Icon(
               Icons.add,

@@ -2,6 +2,10 @@
 
 import 'package:flutter/material.dart';
 
+enum buttonText {
+  Cancel, Confirm
+}
+
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
 
@@ -21,7 +25,7 @@ class _CreateTaskState extends State<CreateTask> {
         ),
         leading: BackButton(
           onPressed: () {
-            returnText(context);
+            returnText(context, buttonText.Cancel);
           },
         ),
       ),
@@ -48,11 +52,23 @@ class _CreateTaskState extends State<CreateTask> {
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  returnText(context);
-                },
-                child: Text('Confirm'),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      returnText(context, buttonText.Cancel);
+                    },
+                    child: Text('Cancel'),),
+                  SizedBox(width: 30.0,),
+                  ElevatedButton(
+                    onPressed: () async {
+                      returnText(context, buttonText.Confirm);
+                    },
+                    child: Text('Confirm'),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -75,14 +91,15 @@ class _CreateTaskState extends State<CreateTask> {
     return iconClear;
   }
 
-  void returnText(BuildContext context) {
+  void returnText(BuildContext context, buttonText btnText) {
     String editedText;
-    if (_controller.text.isEmpty) {
-      editedText = 'Empty task, you can edit ->';
+    if (_controller.text.isEmpty|| btnText == buttonText.Cancel) {
+      Navigator.pop(context);
     } else {
       editedText = _controller.text;
+      Navigator.pop(context, editedText);
     }
-    Navigator.pop(context, editedText);
+    
   }
 
 }

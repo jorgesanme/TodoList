@@ -29,7 +29,7 @@ class _EditTaskState extends State<EditTask> {
         ),
         leading: BackButton(
           onPressed: () {
-            returnText(context);
+            returnText(context, 'Cancel');
           },
         ),
       ),
@@ -44,8 +44,9 @@ class _EditTaskState extends State<EditTask> {
                   textAlign: TextAlign.justify),
               ElevatedButton(
                 child: Text('Create New Task'),
+
                 onPressed: () {
-                  // showDialog(context: context, builder: createDialog);
+
                   _createNewTask(context);
                 },
               ),
@@ -74,14 +75,14 @@ class _EditTaskState extends State<EditTask> {
                       ElevatedButton(
                         //Falso cancel, el control de la cancelación lo hace el returnText()
                         onPressed: () async {
-                          returnText(context);
+                          returnText(context, 'Cancel');
                         },
                         child: Text('Cancel'),
                       ),
                       SizedBox(width: 30.0,),
                       ElevatedButton(
                         onPressed: () async {
-                          returnText(context);
+                          returnText(context, 'Confirm');
                         },
                         child: Text('Confirm'),
                       ),
@@ -97,9 +98,9 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  void returnText(BuildContext context) {
+  void returnText(BuildContext context, String buttonText) {
     String editedText;
-    if (_controller.text.isEmpty) {
+    if (_controller.text.isEmpty || buttonText =='Cancel') {
       Navigator.pop(context);
     } else {
       editedText = _controller.text;
@@ -135,6 +136,10 @@ class _EditTaskState extends State<EditTask> {
         builder: (context) => CreateTask(),
       ),
     );
-    TaskRepository.shared.toDo(newTaskText.toString());
+    if(newTaskText != null)
+      setState(() {
+        TaskRepository.shared.toDo(newTaskText.toString());
+      });
+
   }
 }
