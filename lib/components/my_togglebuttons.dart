@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gsd_app/domain/User_Preferences.dart';
 
+import 'constants.dart';
+
 class MyToggleButtons extends StatefulWidget {
   const MyToggleButtons({Key? key}) : super(key: key);
 
@@ -23,10 +25,7 @@ class _MyToggleButtonsState extends State<MyToggleButtons> {
     2: kOptionTextDelete,
   };
 
-  static const String kOptionTextNothing = 'Nothing'; //(Default)
-  static const String kOptionTextCrossOut = 'Cross out';
-  static const String kOptionTextDelete = 'Delete';
-  static const String kOptionTextDeleteAll = 'AllDelete';
+
   String? selected;
 
   @override
@@ -91,25 +90,23 @@ class _MyToggleButtonsState extends State<MyToggleButtons> {
               ),
             ],
             onPressed: (int newIndex) async {
-              setState(()   {
+              setState(() {
                 for (int index = 0; index < isSelected.length; index++) {
                   if (index == newIndex) {
                     isSelected[index] = true;
                     selected = doneSelectedOptions[index];
-                  }else {
+                  } else {
                     isSelected[index] = false;
                   }
                 }
               });
               if (selected == kOptionTextDelete) {
-                selected = await showDialog(
-                    context: context, builder: createDialog);
+                selected =
+                    await showDialog(context: context, builder: createDialog);
               }
               //Save selected into SharedPreferences
               UserPreferences.setUserDonePreference(selected!);
-              //check it work
-              String esto = UserPreferences.getUserPreference();
-              print(esto);
+
             },
           ),
         ],
@@ -143,28 +140,39 @@ class _MyToggleButtonsState extends State<MyToggleButtons> {
     );
   }
 
+  //todo -se debe extraer la opcion seleccionada de las setting para exponer
   List<bool> configureBotton() {
     String userSelected = UserPreferences.getUserPreference();
     print(userSelected);
     switch (userSelected) {
-      case 'Nothin':
+      case kOptionTextNothing:
         {
-          isSelected = [true, false, false];
+          setState(() {
+            isSelected = [true, false, false];
+          });
         }
         break;
       case kOptionTextCrossOut:
         {
-          isSelected = [false, true, false];
+          setState(() {
+            isSelected = [false, true, false];
+          });
         }
         break;
       case kOptionTextDelete:
         {
-          isSelected = [false, false, true];
+          setState(() {
+            isSelected = [false, false, true];
+          });
+
         }
         break;
       default:
         {
-          isSelected = [true, false, false];
+          setState(() {
+            isSelected = [true, false, false];
+          });
+
           break;
         }
     }

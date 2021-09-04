@@ -7,6 +7,7 @@ import 'package:mow/mow.dart';
 import '../components/delete_task_background.dart';
 import '../components/edit_task_background.dart';
 import '../components/image_widget.dart';
+import 'User_Preferences.dart';
 
 class TaskListWidget extends ModelWidget<TaskRepository> {
   TaskListWidget({required TaskRepository model, Key? key})
@@ -49,7 +50,33 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
 
   void _onCheckboxTap(bool? value) {
     final bool newValue = value ?? false;
-    widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+    // extraer de sharePreference la preference y
+    // si la opcion es cross out  = hacerlo
+    // si la opcion es delete = borrar uno del repositorio
+    // si la opcion es Alldelete = llamar al repositorio y borrar todas con un .map
+    //check it work
+    String _pref = UserPreferences.getUserPreference();
+    print(_pref);
+
+    switch(_pref){
+      case kOptionTextDelete:{
+        if(widget.model.state == TaskState.toDo){
+          TaskRepository.shared.removeAt(widget.index);
+        }
+        break;
+      }
+      case kOptionTextDeleteAll:{
+        // TaskRepository.shared.removeAllDone();
+        break;
+      }
+      case kOptionTextCrossOut: {
+        widget.model.state = newValue ? TaskState.done : TaskState.toDo;
+        break;
+      }
+    }
+
+
+
   }
 
   /// borrar un task al desplazar una card
@@ -82,9 +109,12 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
             settings: RouteSettings(arguments: widget.index),
           ),
         );
-        setState(() {
-          TaskRepository.shared.editTask(widget.index, widget.model, newValue!);
-        });
+        if ( newValue != null ){
+          setState(() {
+            TaskRepository.shared.editTask(widget.index, widget.model, newValue);
+          });
+        }
+
         break;
       case DismissDirection.startToEnd:
         /// Delete de task
@@ -135,12 +165,11 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
             onChanged: _onCheckboxTap,
           ),
           title: Text(
-            // todo cambiar el color del texto y tachado al se un task.done
+            // cambiar el color del texto y tachado al se un task.done
             widget.model.description,
-            style: widget. model.state == TaskState.done
+            style: widget. model.state == TaskState.toDo
                 ? Theme.of(context).textTheme.bodyText1
                 : kTextTaskDoneStyle,
-            // style: Theme.of(context).textTheme.bodyText1,
           ),
           trailing: ImageWidget(imageName: 'taskImage',),
         ),

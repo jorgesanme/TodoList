@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gsd_app/domain/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
+import 'create_task.dart';
+
 class EditTask extends StatefulWidget {
   @override
   _EditTaskState createState() => _EditTaskState();
@@ -35,33 +37,58 @@ class _EditTaskState extends State<EditTask> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextField(
-                controller: _controller,
-                onChanged: (value) {
-                  setState(() {
-                    //update the textfield for each letter tapped
-                    // widget.model.description =  _controller.text;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: widget.model.description,
-                  labelText: 'Edit your task',
-                  counterText: '${_controller.text.length.toInt()}',
-                  border: OutlineInputBorder(),
-                  icon: Icon(Icons.edit),
-                  suffixIcon: _iconButton(),
-                ),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-              ),
+              Text(
+                  'Dado que me ha sido imposible navegar desde el FAB, se puede crear un Task desde aquí',
+                  textAlign: TextAlign.justify),
               ElevatedButton(
-                onPressed: () async {
+                child: Text('Create New Task'),
+                onPressed: () {
                   // showDialog(context: context, builder: createDialog);
-                  returnText(context);
+                  _createNewTask(context);
                 },
-                child: Text('Confirm'),
+              ),
+              SizedBox(
+                height: 50.0,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: widget.model.description,
+                      labelText: 'Edit your task',
+                      counterText: '${_controller.text.length.toInt()}',
+                      border: OutlineInputBorder(),
+                      icon: Icon(Icons.edit),
+                      suffixIcon: _iconButton(),
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        //Falso cancel, el control de la cancelación lo hace el returnText()
+                        onPressed: () async {
+                          returnText(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      SizedBox(width: 30.0,),
+                      ElevatedButton(
+                        onPressed: () async {
+                          returnText(context);
+                        },
+                        child: Text('Confirm'),
+                      ),
+                    ],
+                  ),
+
+                ],
               ),
             ],
           ),
@@ -70,50 +97,15 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  Widget createDialog(BuildContext context) {
-    return AlertDialog(
-      title: Text('Atención Pregunta!!'),
-      content: TextField(
-        controller: _controller,
-        onChanged: (value) {
-          setState(() {
-            //update the textfield for each letter tapped
-            // widget.model.description =  _controller.text;
-          });
-        },
-        decoration: InputDecoration(
-          hintText: 'enter text',
-          labelText: 'Crear your task',
-          counterText: '${_controller.text.length.toInt()}',
-          border: OutlineInputBorder(),
-          icon: Icon(Icons.edit),
-          suffixIcon: _iconButton(),
-        ),
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {},
-          child: Text('Pos-Fale'),
-        ),
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Nooo!!!'))
-      ],
-    );
-  }
-
   void returnText(BuildContext context) {
     String editedText;
     if (_controller.text.isEmpty) {
-      editedText = 'Empty task';
+      Navigator.pop(context);
     } else {
       editedText = _controller.text;
+      Navigator.pop(context, editedText);
     }
-    Navigator.pop(context, editedText);
+
   }
 
   IconButton? _iconButton() {
@@ -135,5 +127,14 @@ class _EditTaskState extends State<EditTask> {
   int? _extractIndex(BuildContext context) {
     final Object? index = ModalRoute.of(context)?.settings.arguments;
     return index as int?;
+  }
+
+  Future<String?> _createNewTask(BuildContext context) async {
+    final String? newTaskText = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (context) => CreateTask(),
+      ),
+    );
+    TaskRepository.shared.toDo(newTaskText.toString());
   }
 }

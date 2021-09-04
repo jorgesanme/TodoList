@@ -39,10 +39,10 @@ class _CreateTaskState extends State<CreateTask> {
                 },
                 decoration: InputDecoration(
                   hintText: 'Type what you want to do',
-                  labelText: 'Create your task',
+                  labelText: 'Create NEW task',
                   counterText: '${_controller.text.length.toInt()}',
                   border: OutlineInputBorder(),
-                  icon: Icon(Icons.edit),
+                  icon: Icon(Icons.add_task),
                   suffixIcon: _iconButtonmy(),
                 ),
                 keyboardType: TextInputType.multiline,

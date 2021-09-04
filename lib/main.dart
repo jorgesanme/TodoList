@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gsd_app/domain/User_Preferences.dart';
-import 'package:gsd_app/screens/create_task.dart';
 import 'package:gsd_app/domain/setting_drawer.dart';
 import 'package:gsd_app/domain/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
-import 'Utils/my_alertdialog.dart';
 
 void main() async {
   // init the preferences
@@ -73,7 +71,7 @@ class GSDApp extends StatelessWidget {
           child: FloatingActionButton(
             // todo create a new widget where user can create a task
             onPressed: () {
-              showDialog(context: context, builder: createDialog);
+              // showDialog(context: context, builder: createDialog);
               // _createNewTask(context);
             },
             child: Icon(
@@ -86,14 +84,7 @@ class GSDApp extends StatelessWidget {
     );
   }
 
-  Future<String?> _createNewTask(BuildContext context) async {
-    final String? newTaskText = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (context) => CreateTask(),
-      ),
-    );
-    TaskRepository.shared.toDo(newTaskText.toString());
-  }
+
 
   Widget createDialog(BuildContext context) {
     return AlertDialog(
