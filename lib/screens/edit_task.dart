@@ -37,58 +37,41 @@ class _EditTaskState extends State<EditTask> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                  'Dado que me ha sido imposible navegar desde el FAB, se puede crear un Task desde aquí',
-                  textAlign: TextAlign.justify),
-              ElevatedButton(
-                child: Text('Create New Task'),
-
-                onPressed: () {
-
-                  _createNewTask(context);
-                },
+              TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  hintText: widget.model.description,
+                  labelText: 'Edit your task',
+                  counterText: '${_controller.text.length.toInt()}',
+                  border: OutlineInputBorder(),
+                  icon: Icon(Icons.edit),
+                  suffixIcon: _iconButton(),
+                ),
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
               ),
-              SizedBox(
-                height: 50.0,
-              ),
-              Column(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: widget.model.description,
-                      labelText: 'Edit your task',
-                      counterText: '${_controller.text.length.toInt()}',
-                      border: OutlineInputBorder(),
-                      icon: Icon(Icons.edit),
-                      suffixIcon: _iconButton(),
-                    ),
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
+                  ElevatedButton(
+                    //Falso cancel, el control de la cancelación lo hace el returnText()
+                    onPressed: () async {
+                      returnText(context, 'Cancel');
+                    },
+                    child: Text('Cancel'),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        //Falso cancel, el control de la cancelación lo hace el returnText()
-                        onPressed: () async {
-                          returnText(context, 'Cancel');
-                        },
-                        child: Text('Cancel'),
-                      ),
-                      SizedBox(width: 30.0,),
-                      ElevatedButton(
-                        onPressed: () async {
-                          returnText(context, 'Confirm');
-                        },
-                        child: Text('Confirm'),
-                      ),
-                    ],
+                  SizedBox(
+                    width: 30.0,
                   ),
-
+                  ElevatedButton(
+                    onPressed: () async {
+                      returnText(context, 'Confirm');
+                    },
+                    child: Text('Confirm'),
+                  ),
                 ],
               ),
             ],
@@ -100,13 +83,26 @@ class _EditTaskState extends State<EditTask> {
 
   void returnText(BuildContext context, String buttonText) {
     String editedText;
-    if (_controller.text.isEmpty || buttonText =='Cancel') {
+    if (_controller.text.isEmpty || buttonText == 'Cancel') {
       Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('The edition has been canceled or the field was empty',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText2),
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      ));
     } else {
       editedText = _controller.text;
       Navigator.pop(context, editedText);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('The edition has been done',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText2),
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      ));
     }
-
   }
 
   IconButton? _iconButton() {
@@ -128,18 +124,5 @@ class _EditTaskState extends State<EditTask> {
   int? _extractIndex(BuildContext context) {
     final Object? index = ModalRoute.of(context)?.settings.arguments;
     return index as int?;
-  }
-
-  Future<String?> _createNewTask(BuildContext context) async {
-    final String? newTaskText = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (context) => CreateTask(),
-      ),
-    );
-    if(newTaskText != null)
-      setState(() {
-        TaskRepository.shared.toDo(newTaskText.toString());
-      });
-
   }
 }

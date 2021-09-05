@@ -94,10 +94,25 @@ class _CreateTaskState extends State<CreateTask> {
   void returnText(BuildContext context, buttonText btnText) {
     String editedText;
     if (_controller.text.isEmpty|| btnText == buttonText.Cancel) {
+      //con tiempo estos se puede separar en dos IF distintos
       Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('The creation of a task has been canceled or the field was empty',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText2),
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      ));
     } else {
       editedText = _controller.text;
       Navigator.pop(context, editedText);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Success creation',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyText2),
+        duration: Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+      ));
     }
     
   }
