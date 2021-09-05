@@ -140,7 +140,7 @@ class _MyToggleButtonsState extends State<MyToggleButtons> {
     );
   }
 
-  //todo -se debe extraer la opcion seleccionada de las setting para exponer
+  // Todo -se debe extraer la opcion seleccionada de las setting para exponer
   List<bool> configureBotton() {
     String userSelected = UserPreferences.getUserPreference();
     print(userSelected);

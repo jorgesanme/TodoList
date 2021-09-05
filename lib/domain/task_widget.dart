@@ -131,12 +131,10 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
                 .editTask(widget.index, widget.model, newValue);
           });
         }
-
         break;
       case DismissDirection.startToEnd:
-
         /// Delete de task
-        //todo refactor this into a Widget o Utils
+        //todo refactor this into a  SnackBar Widget o Utils
         ScaffoldMessenger.of(_currentContext).showSnackBar(
           SnackBar(
             action: SnackBarAction(
