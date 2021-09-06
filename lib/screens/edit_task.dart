@@ -6,6 +6,7 @@ import 'package:gsd_domain/gsd_domain.dart';
 
 import 'create_task.dart';
 
+enum buttonText { Cancel, Confirm }
 class EditTask extends StatefulWidget {
   @override
   _EditTaskState createState() => _EditTaskState();
@@ -30,7 +31,7 @@ class _EditTaskState extends State<EditTask> {
         ),
         leading: BackButton(
           onPressed: () {
-            returnText(context, 'Cancel');
+            returnText(context, buttonText.Cancel);
           },
         ),
       ),
@@ -59,7 +60,7 @@ class _EditTaskState extends State<EditTask> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      returnText(context, 'Cancel');
+                      returnText(context, buttonText.Cancel);
                     },
                     child: Text('Cancel'),
                   ),
@@ -68,7 +69,7 @@ class _EditTaskState extends State<EditTask> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      returnText(context, 'Confirm');
+                      returnText(context, buttonText.Confirm);
                     },
                     child: Text('Confirm'),
                   ),
@@ -81,9 +82,9 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  void returnText(BuildContext context, String btnText) {
+  void returnText(BuildContext context, buttonText btnText) {
     String editedText;
-    if (_controller.text.isEmpty || buttonText == 'Cancel') {
+    if (_controller.text.isEmpty) {
       Navigator.pop(context);
       String message = 'Field cannot be empty';
       GlobalSnackBar.show(context, message);
