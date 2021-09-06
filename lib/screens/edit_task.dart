@@ -44,6 +44,10 @@ class _EditTaskState extends State<EditTask> {
             children: [
               TextField(
                 controller: _controller,
+                onChanged: (value){
+                  setState(() {
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: widget.model.description,
                   labelText: 'Edit your task',
