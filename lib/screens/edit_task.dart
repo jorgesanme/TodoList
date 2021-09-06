@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gsd_app/Utils/global_snackbar.dart';
 import 'package:gsd_app/domain/task_widget.dart';
 import 'package:gsd_domain/gsd_domain.dart';
 
@@ -57,7 +58,6 @@ class _EditTaskState extends State<EditTask> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    //Falso cancel, el control de la cancelación lo hace el returnText()
                     onPressed: () async {
                       returnText(context, 'Cancel');
                     },
@@ -81,27 +81,23 @@ class _EditTaskState extends State<EditTask> {
     );
   }
 
-  void returnText(BuildContext context, String buttonText) {
+  void returnText(BuildContext context, String btnText) {
     String editedText;
     if (_controller.text.isEmpty || buttonText == 'Cancel') {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('The edition has been canceled or the field was empty',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyText2),
-        duration: Duration(seconds: 4),
-        behavior: SnackBarBehavior.floating,
-      ));
-    } else {
+      String message = 'Field cannot be empty';
+      GlobalSnackBar.show(context, message);
+
+    }else if(btnText == buttonText.Cancel){
+      Navigator.pop(context);
+      String message = 'Edition canceled';
+      GlobalSnackBar.show(context, message);
+    }
+    else {
       editedText = _controller.text;
       Navigator.pop(context, editedText);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('The edition has been done',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyText2),
-        duration: Duration(seconds: 4),
-        behavior: SnackBarBehavior.floating,
-      ));
+      String message = 'Successfull edition';
+      GlobalSnackBar.show(context, message);
     }
   }
 

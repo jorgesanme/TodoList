@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gsd_app/Utils/global_snackbar.dart';
 import 'package:gsd_app/components/constants.dart';
 import 'package:gsd_app/screens/edit_task.dart';
 import 'package:gsd_domain/gsd_domain.dart';
@@ -50,11 +51,6 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
 
   void _onCheckboxTap(bool? value) {
     final bool newValue = value ?? false;
-    // extraer de sharePreference la preference y
-    // si la opcion es cross out  = hacerlo
-    // si la opcion es delete = borrar uno del repositorio
-    // si la opcion es Alldelete = llamar al repositorio y borrar todas de un plumazo
-    //check it work
     setState(() {
       _pref = UserPreferences.getUserPreference();
     });
@@ -135,6 +131,16 @@ class _TaskWidgetState extends ObserverState<Task, TaskWidget> {
       case DismissDirection.startToEnd:
         /// Delete de task
         //todo refactor this into a  SnackBar Widget o Utils
+ /*
+      String message = 'Are you sure to delete that note?';
+      Function onPress = (){
+         TaskRepository.shared.removeAt(widget.index);
+        _confirmDelete(widget.model.description);
+      };
+      GlobalSnackBar.showConfirm(context, message, onPress);
+
+ */
+
         ScaffoldMessenger.of(_currentContext).showSnackBar(
           SnackBar(
             action: SnackBarAction(

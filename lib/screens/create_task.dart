@@ -1,10 +1,7 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:gsd_app/Utils/global_snackbar.dart';
 
-enum buttonText {
-  Cancel, Confirm
-}
+enum buttonText { Cancel, Confirm }
 
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
@@ -15,6 +12,7 @@ class CreateTask extends StatefulWidget {
 
 class _CreateTaskState extends State<CreateTask> {
   final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +36,7 @@ class _CreateTaskState extends State<CreateTask> {
               TextField(
                 controller: _controller,
                 onChanged: (value) {
-                  setState(() {
-                  });
+                  setState(() {});
                 },
                 decoration: InputDecoration(
                   hintText: 'Type what you want to do',
@@ -59,8 +56,11 @@ class _CreateTaskState extends State<CreateTask> {
                     onPressed: () {
                       returnText(context, buttonText.Cancel);
                     },
-                    child: Text('Cancel'),),
-                  SizedBox(width: 30.0,),
+                    child: Text('Cancel'),
+                  ),
+                  SizedBox(
+                    width: 30.0,
+                  ),
                   ElevatedButton(
                     onPressed: () async {
                       returnText(context, buttonText.Confirm);
@@ -75,6 +75,7 @@ class _CreateTaskState extends State<CreateTask> {
       ),
     );
   }
+
   IconButton? _iconButtonmy() {
     IconButton? iconClear;
     if (_controller.text.isEmpty) {
@@ -93,28 +94,19 @@ class _CreateTaskState extends State<CreateTask> {
 
   void returnText(BuildContext context, buttonText btnText) {
     String editedText;
-    if (_controller.text.isEmpty|| btnText == buttonText.Cancel) {
-      //con tiempo estos se puede separar en dos IF distintos
+    if (_controller.text.isEmpty) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('The creation of a task has been canceled or the field was empty',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyText2),
-        duration: Duration(seconds: 4),
-        behavior: SnackBarBehavior.floating,
-      ));
+      String message = 'Field cannot be empty';
+      GlobalSnackBar.show(context, message);
+    } else if (btnText == buttonText.Cancel) {
+      Navigator.pop(context);
+      String message = 'Creation canceled';
+      GlobalSnackBar.show(context, message);
     } else {
       editedText = _controller.text;
       Navigator.pop(context, editedText);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Success creation',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyText2),
-        duration: Duration(seconds: 4),
-        behavior: SnackBarBehavior.floating,
-      ));
+      String message = 'Successfull creation';
+      GlobalSnackBar.show(context, message);
     }
-    
   }
-
 }
